@@ -35,16 +35,13 @@ namespace Scenes.InGame.Ball
                 {
                     Restart();
                 }).AddTo(this);
+
+            //IsMovableの監視をストリームに変換
+            this.ObserveEveryValueChanged(x => x._ballStatus.IsMovable)
+                .Where(x => x == false)
+                .Subscribe(_ => _rigidbody2D.velocity = Vector2.zero);
         }
 
-        //TODO:現在UpdateでずっとBallStatusを参照し続けています。イベント機能を使って、IsMovableの値が変更されたときだけ下の処理を実行するように変更してみましょう
-        private void Update()
-        {
-            if(_ballStatus.IsMovable == false)
-            {
-                _rigidbody2D.velocity = Vector2.zero;
-            }
-        }
         private void OnCollisionEnter2D(Collision2D collision)
         {
             if (collision.gameObject.CompareTag("DeadFrame"))

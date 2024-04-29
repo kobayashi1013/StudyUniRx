@@ -1,4 +1,6 @@
 using UnityEngine;
+using Scenes.InGame.Manager;
+using UniRx;
 
 namespace Scenes.InGame.Ball
 {
@@ -11,11 +13,15 @@ namespace Scenes.InGame.Ball
         [SerializeField, Tooltip("スティックからy軸にオフセットする距離")]
         private float _yOffsetDistance = 0.5f;
 
-        //TODO:現在InGameManagerからスポーンさせています。これをInGameManagerからイベントを発行させ、このスクリプト受け取って自分でSpawnさせるように変更しましょう
-        public void Spawn()
+        void Start()
         {
-            var Stick = GameObject.FindWithTag("Player");
-            Instantiate(_ballPrefab, Stick.transform.position + new Vector3(0, _yOffsetDistance, 0), Quaternion.identity, transform.parent);
+            //スポーンをストリーム化
+            InGameManager.Instance.OnSpawn
+                .Subscribe(_ =>
+                {
+                    var Stick = GameObject.FindWithTag("Player");
+                    Instantiate(_ballPrefab, Stick.transform.position + new Vector3(0, _yOffsetDistance, 0), Quaternion.identity, transform.parent);
+                }).AddTo(this);
         }
     }
 }

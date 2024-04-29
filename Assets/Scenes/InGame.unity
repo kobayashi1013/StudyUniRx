@@ -717,6 +717,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0230ebabb45df8c4384fe59aa50a312f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerHp: 3
   _socreText: {fileID: 734463361}
 --- !u!4 &594792921
 Transform:

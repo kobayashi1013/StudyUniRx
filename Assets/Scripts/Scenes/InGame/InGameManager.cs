@@ -6,17 +6,22 @@ using Scenes.InGame.Stick;
 using TMPro;
 using UniRx;
 using System;
+using System.Diagnostics;
 
 namespace Scenes.InGame.Manager
 {
     public class InGameManager : MonoBehaviour
     {
+        [SerializeField, Tooltip("残基")]
+        private int _playerHp = 1;
+
         BallSpawner _ballSpawner;
         BallStatus _ballStatus;
         StickStatus _stickStatus;
         public static InGameManager Instance;
         private int _score = 0;//スコア
         private int _blockSize = 0;//blockの数
+        private int _playerHpCount = 0;
         [SerializeField,Tooltip("スコアを表示するUI")]
         TextMeshProUGUI _socreText;
 
@@ -24,6 +29,8 @@ namespace Scenes.InGame.Manager
         public IObservable<Unit> OnPause => Pause;
         private Subject<Unit> Restart = new Subject<Unit>();
         public IObservable<Unit> OnRestart => Restart;
+        private Subject<Unit> Spawn = new Subject<Unit>();
+        public IObservable<Unit> OnSpawn => Spawn;
 
         private void Awake()
         {
@@ -40,13 +47,15 @@ namespace Scenes.InGame.Manager
         {
             _ballSpawner = GetComponent<BallSpawner>();
             StartCoroutine(BallSpawn());
+
+            _playerHpCount = _playerHp;
         }
 
        
         IEnumerator BallSpawn()
         {
             yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space));
-            _ballSpawner.Spawn();
+            Spawn.OnNext(default);
         }
 
         public void GamePause()
@@ -79,6 +88,12 @@ namespace Scenes.InGame.Manager
             {
                 GameOver();
             }
+        }
+
+        public void ChangeScore(int score)
+        {
+            _score += score;
+            _socreText.text = $"SCORE:{_score}";
         }
     }
 }

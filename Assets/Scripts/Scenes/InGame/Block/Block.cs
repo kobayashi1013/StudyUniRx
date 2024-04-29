@@ -1,3 +1,5 @@
+using System.ComponentModel;
+using System.Security.Cryptography;
 using UnityEngine;
 namespace Scenes.InGame.Block
 {
@@ -6,9 +8,13 @@ namespace Scenes.InGame.Block
         [Header("ブロックのパラメータ")]
         [SerializeField,Tooltip("ブロックの耐久度")]
         private int _hp = 1;
+        [Header("その他")]
+        [SerializeField, Tooltip("破壊時にスポーンするオブジェクト")]
+        private GameObject _spawnObject;
 
         public void Break()
         {
+            Instantiate(_spawnObject, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
 
