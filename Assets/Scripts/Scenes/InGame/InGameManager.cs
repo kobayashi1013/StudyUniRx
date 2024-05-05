@@ -12,16 +12,12 @@ namespace Scenes.InGame.Manager
 {
     public class InGameManager : MonoBehaviour
     {
-        [SerializeField, Tooltip("残基")]
-        private int _playerHp = 1;
-
         BallSpawner _ballSpawner;
         BallStatus _ballStatus;
         StickStatus _stickStatus;
         public static InGameManager Instance;
         private int _score = 0;//スコア
         private int _blockSize = 0;//blockの数
-        private int _playerHpCount = 0;
         [SerializeField,Tooltip("スコアを表示するUI")]
         TextMeshProUGUI _socreText;
 
@@ -47,8 +43,6 @@ namespace Scenes.InGame.Manager
         {
             _ballSpawner = GetComponent<BallSpawner>();
             StartCoroutine(BallSpawn());
-
-            _playerHpCount = _playerHp;
         }
 
        
